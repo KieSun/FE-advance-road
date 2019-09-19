@@ -238,7 +238,7 @@ describe('Loading.vue', () => {
 
 执行 `yarn test:unit` 命令后，我们应该能见到如下图的内容
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919233037.png)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190920000351.png)
 
 如果你想更进一步学习在 Vue 中进行单元测试的内容，推荐以下资料：
 
