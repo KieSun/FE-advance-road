@@ -98,3 +98,26 @@ expect(组件实例).toMatchSnapshot()
 以上代码在第一次执行时会生成快照，在接下来的测试中每次都会去对比两者的内容是否一致。
 
 ## Vue 中实践 Jest
+
+### 配置
+
+不管你是现有项目还是新项目需要使用 Jest，都可以通过 Vue Cli 3 解决。
+
+**对于现有项目**，只需要在项目文件夹中执行一条命令即可
+
+```bash
+vue add unit-jest
+```
+
+脚手架会自动在项目中帮你安装 Jest 需要的配置，安装完成后你会发现根目录中新增了一个文件夹
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919171612.png)
+
+文件夹中包含了一个测试用例，你只需执行 `yarn test:unit` 即可运行测试用例。
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919171900.png)
+
+**对于新项目来说**，在创建项目过程中需要选择 Manually select features，然后按照以下内容选择即可集成 Jest 环境。
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919172525.png)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919172526.png)
