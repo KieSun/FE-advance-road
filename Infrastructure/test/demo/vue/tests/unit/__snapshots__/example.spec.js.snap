@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading.vue snapshot 1`] = `<div class="loading"><span class="loading__indicator" style="width: 20px; height: 20px; border-color: red; border-bottom-color: transparent;"></span> <span class="loading__text">Loading</span></div>`;
