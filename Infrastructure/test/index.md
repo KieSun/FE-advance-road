@@ -138,6 +138,8 @@ module.exports = {
 
 推荐在完成环境配置后阅读该[文档](https://vue-test-utils.vuejs.org/zh/guides/#%E8%B5%B7%E6%AD%A5)。
 
+[本小结 demo 地址](https://github.com/KieSun/FE-advance-road/tree/master/Infrastructure/test/demo/vue)
+
 ### 配置
 
 不管你是现有项目还是新项目需要使用 Jest，都可以通过 Vue Cli 3 解决。
