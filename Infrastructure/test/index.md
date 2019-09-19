@@ -97,6 +97,43 @@ expect(组件实例).toMatchSnapshot()
 
 以上代码在第一次执行时会生成快照，在接下来的测试中每次都会去对比两者的内容是否一致。
 
+### 配置文件
+
+Jest 和 Babel 一样，使用的时候都需要一个配置文件。对于 Jest 来说，你需要在根目录中创建一个名为 `jest.config.js` 的文件。
+
+以下是一些常见的配置选项：
+
+```js
+module.exports = {
+  // 文件后缀
+  moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
+  // 文件如何转换
+  transform: {
+    '^.+\\.vue$': 'vue-jest',
+    '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$':
+      'jest-transform-stub',
+    '^.+\\.jsx?$': 'babel-jest'
+  },
+  // 忽略的文件
+  transformIgnorePatterns: ['/node_modules/'],
+  // 生成快照需要的插件
+  snapshotSerializers: ['jest-serializer-vue'],
+  // 需要执行哪些目录下的测试用例
+  testMatch: [
+    '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
+  ],
+  // 在执行用例前的配置文件
+  setupFiles: ['./tests/setup.js'],
+  // 测试覆盖率配置
+  collectCoverage: true,
+  coverageReporters: ['html', 'lcov', 'text-summary'],
+  coverageDirectory: './test/coverage',
+  collectCoverageFrom: ['components/**/*.vue']
+}
+```
+
+更多的配置属性可以查阅[文档](https://doc.ebichu.cc/jest/docs/zh-Hans/configuration.html)学习。
+
 ## Vue 中实践 Jest
 
 ### 配置
@@ -121,3 +158,5 @@ vue add unit-jest
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919172525.png)
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919172526.png)
+
+### 实践
