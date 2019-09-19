@@ -84,3 +84,15 @@ expect(mockCallback.mock.results[0].value).toBe(2)
 ```
 
 当然 Mock 函数还有更多用法。比如模拟返回值，追踪函数被调用的各种情况等等，更多的内容可以阅读[文档](https://jestjs.io/docs/zh-Hans/mock-functions)去学习。
+
+### 快照
+
+快照在测试组件时是个很有用的功能，可以帮助我们确保在维护代码的过程中不会对组件的 UI 进行改变。
+
+用法相当简单：
+
+```js
+expect(组件实例).toMatchSnapshot()
+```
+
+以上代码在第一次执行时会生成快照，在接下来的测试中每次都会去对比两者的内容是否一致。
