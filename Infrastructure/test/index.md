@@ -163,4 +163,83 @@ vue add unit-jest
 
 ### 实践
 
+完成环境配置以后我们就开始进行一个简单的组件测试吧。
+
+在 components 文件夹下我们新增一个 `loading.vue` 文件
+
+```js
+<template>
+  <div class="loading">
+    <span class="loading__indicator" :style="style" />
+    <span class="loading__text" v-show="text">{{ text }}</span>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    text: String,
+    size: {
+      type: Number,
+      default: 26
+    },
+    indicatorColor: {
+      type: String,
+      default: "#1989FA"
+    }
+  },
+  computed: {
+    style() {
+      return {
+        width: this.size + "px",
+        height: this.size + "px",
+        borderColor: this.indicatorColor,
+        borderBottomColor: "transparent"
+      };
+    }
+  }
+};
+</script>
+```
+
+以上代码是一个很简单的组件，传入 `props` 就完成了整个组件的渲染，没有其他的逻辑了。
+
+测试用例也很简单，完成对所有的 `props` 测试即可实现 100% 的测试覆盖率。
+
+```js
+describe('Loading.vue', () => {
+  it('renders props.msg when passed', () => {
+    const wrapper = mount(Loading, {
+      propsData: {
+        text: 'Loading',
+        indicatorColor: 'red',
+        size: 20
+      }
+    })
+    const indicatorStyle = wrapper.find('.loading__indicator').element.style
+    expect(wrapper.find('.loading__text').text()).toBe('Loading')
+    expect(indicatorStyle.borderColor).toContain('red')
+    expect(indicatorStyle.width).toContain('20px')
+  })
+  it('snapshot', () => {
+    const wrapper = mount(Loading, {
+      propsData: {
+        text: 'Loading',
+        indicatorColor: 'red',
+        size: 20
+      }
+    })
+    expect(wrapper).toMatchSnapshot()
+  })
+})
+```
+
+执行 `yarn test:unit` 命令后，我们应该能见到如下图的内容
+
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20190919233037.png)
+
+如果你想更进一步学习在 Vue 中进行单元测试的内容，推荐以下资料：
+
+- 上文中的文档，内容很详尽
+- [一篇文章学会 Vue 项目单元测试](https://zhuanlan.zhihu.com/p/48758013)，有介绍如何测试复杂组件
+- [Vant 组件库](https://github.com/youzan/vant/tree/dev/src)，阅读 Vant 组件库中的测试用例（在每个组件的 test 目录下）
