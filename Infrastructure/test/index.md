@@ -167,6 +167,8 @@ vue add unit-jest
 
 完成环境配置以后我们就开始进行一个简单的组件测试吧。
 
+PS：组件测试需要用到 `@vue/test-utils` 这个库，因为需要它来帮助我们 `mount` 组件以及对组件进行一系列的操作。当组件挂载以后，我们就可以通过 Jest 进行断言、Mock、生成快照等等。
+
 在 components 文件夹下我们新增一个 `loading.vue` 文件
 
 ```js
@@ -245,3 +247,34 @@ describe('Loading.vue', () => {
 - 上文中的文档，内容很详尽
 - [一篇文章学会 Vue 项目单元测试](https://zhuanlan.zhihu.com/p/48758013)，有介绍如何测试复杂组件
 - [Vant 组件库](https://github.com/youzan/vant/tree/dev/src)，阅读 Vant 组件库中的测试用例（在每个组件的 test 目录下）
+
+## React 中实践 Jest
+
+推荐在完成环境配置后阅读该[文档](https://airbnb.io/enzyme/docs/installation/react-16.html)。
+
+[本小结 demo 地址](https://github.com/KieSun/FE-advance-road/tree/master/Infrastructure/test/demo/react)
+
+### 配置
+
+**对于新项目来说**，如果你使用 create-react-app 的话，那么默认 Jest 就集成在内部了，你只需要运行命令 `yarn eject` 就可以在 package.json 文件中看到 Jest 的配置。
+
+**对于现有项目来说**，你可以通过我的 [demo](https://github.com/KieSun/FE-advance-road/tree/master/Infrastructure/test/demo/react) 或者[这篇文章](https://juejin.im/post/5b6c39bde51d45195c079d62)来学习相关的配置，这里就不再赘述了。
+
+**另外可能有些同学是 TS 的环境，因此我的 Demo 中是以 TS 为基础配置的。**
+
+### 实践
+
+PS：组件测试需要用到 enzyme 以及 enzyme-adapter-react-16 这两个库，因为需要它们来帮助我们 mount 组件以及对组件进行一系列的操作。当组件挂载以后，我们就可以通过 Jest 进行断言、Mock、生成快照等等。
+
+另外鉴于组件测试这块的内容基本和 Vue 中的一致，因此这里就不浪费篇幅复制代码了，具体内容可以去 demo 中学习。
+
+如果你想更进一步学习在 React 中进行单元测试的内容，推荐以下资料：
+
+- [笔者的组件库](https://github.com/KieSun/elephant-design/tree/dev/components)，包括了对组件以及工具函数的测试
+- [ant-design 组件库](https://github.com/ant-design/ant-design)，阅读 Vant 组件库中的测试用例（在每个组件的 __tests__ 目录下）
+
+## 总结
+
+总的来说在项目中进行单元测试需要学习的内容并不多，一个 Jest 外加一个能够挂载组件的库即可。
+
+真正需要花时间学习的应该还是阅读优秀第三方库的测试用例上。
