@@ -134,6 +134,18 @@ module.exports = {
 
 更多的配置属性可以查阅[文档](https://doc.ebichu.cc/jest/docs/zh-Hans/configuration.html)学习。
 
+## 怎么对工具函数进行单测
+
+对于工具函数来说，首要一点就是这个函数不能包含太多的功能，拆分成一个个功能函数是最佳的方式，因为这样测试起来会很方便。
+
+另外对于工具函数来说，输出应该是可控的，所以写单测起来很容易，只需要 `except` 函数的输出即可。
+
+## 怎么对组件进行单测
+
+对于组件来说，最重要的是为组件生成各个状态下的快照，以防代码变动后引发 UI 层面的 Bug。剩余的内容就是对各个功能进行测试了，比如说值设置的对不对啦、事件有没有响应啦、逻辑是不是正确啦等等，这部分的测试主要还要看具体组件的功能了。
+
+另外如果你有做统计测试覆盖率的话，会发现 Branch 指标的提升往往是最难的对于组件来说。一旦你能把这个指标提升到 95% 以上，那么这个组件的问题会少很多。
+
 ## Vue 中实践 Jest
 
 推荐在完成环境配置后阅读该[文档](https://vue-test-utils.vuejs.org/zh/guides/#%E8%B5%B7%E6%AD%A5)。
@@ -270,11 +282,12 @@ PS：组件测试需要用到 enzyme 以及 enzyme-adapter-react-16 这两个库
 
 如果你想更进一步学习在 React 中进行单元测试的内容，推荐以下资料：
 
-- [笔者的组件库](https://github.com/KieSun/elephant-design/tree/dev/components)，包括了对组件以及工具函数的测试
-- [ant-design 组件库](https://github.com/ant-design/ant-design)，阅读 Vant 组件库中的测试用例（在每个组件的 __tests__ 目录下）
+- [笔者的已凉组件库](https://github.com/KieSun/elephant-design/tree/dev/components)，包括了对组件以及工具函数的测试
+- [ant-design 组件库](https://github.com/ant-design/ant-design)
+- 阅读 Vant 组件库中的测试用例（在每个组件的 **tests** 目录下）
 
 ## 总结
 
-总的来说在项目中进行单元测试需要学习的内容并不多，一个 Jest 外加一个能够挂载组件的库即可。
+总的来说在项目中进行单元测试需要学习的内容并不多，一个 Jest 外加一个能够挂载组件的库即可，一天既能上手这块的内容。
 
 真正需要花时间学习的应该还是阅读优秀第三方库的测试用例上。
