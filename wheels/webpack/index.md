@@ -1,4 +1,6 @@
-在这一章节中，我将会带大家来实现一个几十行的迷你打包工具，该工具可以实现以下两个功能
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191210221354.png)
+
+在这部分的内容中，笔者将会带大家来实现一个几十行的迷你打包工具，该工具可以实现以下两个功能
 
 - 将 ES6 转换为 ES5
 - 支持在 JS 文件中 `import` CSS 文件
@@ -157,7 +159,7 @@ var a = 1
 exports.default = a
 ```
 
-Babel 将我们 ES6 的模块化代码转换为了 CommonJS（如果你不熟悉 CommonJS 的话，可以阅读这一章节中关于 [模块化的知识点](https://juejin.im/book/5bdc715fe51d454e755f75ef/section/5bdd0d83f265da615f76ba57)） 的代码，但是浏览器是不支持 CommonJS 的，所以如果这段代码需要在浏览器环境下运行的话，我们需要自己实现 CommonJS 相关的代码，这就是 `bundle` 函数做的大部分事情。
+Babel 将我们 ES6 的模块化代码转换为了 CommonJS 的代码，但是浏览器是不支持 CommonJS 的，所以如果这段代码需要在浏览器环境下运行的话，我们需要自己实现 CommonJS 相关的代码，这就是 `bundle` 函数做的大部分事情。
 
 接下来我们再来逐行解析 `bundle` 函数
 
