@@ -165,4 +165,4 @@ console.log(data.data === state.data)
 
 各位读者有任何疑问或者其他问题都可以在评论区中交流。
 
-![](https://user-gold-cdn.xitu.io/2019/8/4/16c5d08fa4076d33?w=274&h=357&f=png&s=72221)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191216230743.png)
