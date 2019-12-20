@@ -2,9 +2,9 @@
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191210220530.png)
 
-| 微信扫码关注公众号，订阅更多精彩内容                                                                 | 12312                                                                                               |
+| 微信扫码关注公众号，订阅更多精彩内容                                                                 | 加笔者微信进群与大厂大佬讨论技术                                                                    |
 | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| <img src="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191220223702.jpeg" width="500px;" /> | <img src="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191209224113.png" width="500px;" /> |
+| <img src="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191220223702.jpeg" width="500px;" /> | <img src="https://yck-1254263422.cos.ap-shanghai.myqcloud.com/20191209224113.png" width="260px;" /> |
 
 这个仓库托管了前端进阶之路教程，这里阅读内容更佳：yuchengkai.cn/home。
 
