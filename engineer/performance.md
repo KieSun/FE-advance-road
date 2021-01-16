@@ -54,6 +54,8 @@
 
 ## 实战
 
+这是此处产品的源码：[地址](https://github.com/KieSun/p-cop)。
+
 ### 一些性能指标
 
 在开始实战前，我们还是得来了解一些性能指标，随着时代发展，其实一些老的性能优化文章已经有点过时了。谷歌一直在更新性能优化这块的指标，笔者之前写过一篇文章来讲述当下的[最新性能指标有哪些](https://juejin.cn/post/6850037270729359367)，有兴趣的读者可以先详细的读一下。
@@ -101,3 +103,7 @@ perfObserver.observe({ type: 'longtask', buffered: true })
 ```
 
 结合 `getEntriesByType` 以及 `PerformanceObserver`，我们就能获取到所有需要的指标了。
+
+### 上代码！
+
+因为已经贴了[源码地址](https://github.com/KieSun/p-cop)，笔者就不贴大段代码上来了，会把主要流程梳理一遍。
