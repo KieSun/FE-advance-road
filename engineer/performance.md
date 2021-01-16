@@ -72,4 +72,32 @@
 
 这个百分比其实已经算是兼容度很高了，主流浏览器的版本都能很好的支持。
 
-对于 Performance 上 API 具体的讲解文中就不赘述了，有兴趣的可以阅读 [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance)，笔者在这里只讲几个后续用到的 API。
+对于 Performance 上 API 具体的讲解文中就不赘述了，有兴趣的可以阅读 [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance)，笔者在这里只讲几个后续用到的重要 API。
+
+#### getEntriesByType
+
+这个 [API](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEntry/entryType) 可以让我们通过传入 `type` 获取一些相应的信息：
+
+- frame：事件循环中帧的时间数据。
+- resource：加载应用程序资源的详细网络计时数据
+- mark：`performance.mark` 调用信息
+- measure：`performance.measure` 调用信息
+- longtask：长任务（执行时间大于 50ms）信息。这个类型已被废弃（文档未标注，但是在 Chrome 中使用会显示已废弃），我们可以通过别的方式来拿
+- navigation：浏览器文档事件的指标的方法和属性
+- paint：获取 FP 和 FCP 指标
+
+最后两个 `type` 是性能检测中获取指标的关键类型。当然你如果还想分析加载资源相关的信息的话，那可以多加上 `resource` 类型。
+
+#### PerformanceObserver
+
+`PerformanceObserver` 也是用来获取一些性能指标的 API，用法如下：
+
+```js
+const perfObserver = new PerformanceObserver((entryList) => {
+    // 信息处理
+})
+// 传入需要的 type
+perfObserver.observe({ type: 'longtask', buffered: true })
+```
+
+结合 `getEntriesByType` 以及 `PerformanceObserver`，我们就能获取到所有需要的指标了。
