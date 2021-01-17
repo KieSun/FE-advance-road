@@ -1,5 +1,9 @@
 > 本文永远首发自我的 [Github](https://github.com/KieSun/FE-advance-road)，大家可以关注点赞，通常会早于发布各大平台一周时间以上。
 
+本文涉及到的源码及视频地址：
+
+- [源码](https://github.com/KieSun/p-cop)
+
 ## 前言
 
 经常有读者问我什么是前端工程化？该怎么开始做前端工程化？
@@ -389,3 +393,9 @@ logIndicator('FID', entry.processingStart - entry.startTime)
 ```
 
 结束了，有兴趣的可以来[这里](https://github.com/KieSun/p-cop)读一下源码，反正也没几行。
+
+## 最后
+
+文章周末写的，略显仓促，如有出错请斧正，同时也欢迎大家一起探讨问题。
+
+想看更多文章可以关注我的 [Github](https://github.com/KieSun/FE-advance-road) 或者进群一起聊聊前端工程化。
