@@ -392,7 +392,7 @@ export default (type: string, data: IPerData) => {
 logIndicator('FID', entry.processingStart - entry.startTime)
 ```
 
-在这里为止我们 SDK 的大体内容已经完成了，我们可以按需添加一些小功能，比如说获取指标分数
+在这里为止我们 SDK 的大体内容已经完成了，我们可以按需添加一些小功能，比如说获取指标分数。
 
 指标分数是官方给的一些建议，你可以在[官方 Blog](https://web.dev/learn-web-vitals/) 或者[我的文章](https://juejin.cn/post/6850037270729359367)中看到定义的数据。
 
