@@ -228,6 +228,153 @@ export const getNetworkInfo = () => {
 }
 ```
 
-拿完以上的指标之后，我们需要用到 `PerformanceObserver` 来拿一些核心指标了。比如说 FP、FCP、FID 等等，内容就包括在我们上文中看过的思维导图中：
+拿完以上的指标之后，我们需要用到 `PerformanceObserver` 来拿一些核心体验（性能）指标了。比如说 FP、FCP、FID 等等，内容就包括在我们上文中看过的思维导图中：
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/15/16107213325858.jpg)
+
+在这之前我们需要先了解一个注意事项：页面是有可能在处于后台的情况下加载的，因此获取的指标是不准确的。所以我们需要忽略掉这种情况，通过以下代码来存储一个变量，在获取指标的时候比较一下时间戳来判断是否处于后台中：
+
+```ts
+document.addEventListener(
+  'visibilitychange',
+  (event) => {
+    // @ts-ignore
+    hiddenTime = Math.min(hiddenTime, event.timeStamp)
+  },
+  { once: true }
+)
+```
+
+接下来是获取指标的代码，因为他们获取方式大同小异，所以先把获取方法封装一下：
+
+```ts
+// 封装一下 PerformanceObserver，方便后续调用
+export const getObserver = (type: string, cb: IPerCallback) => {
+  const perfObserver = new PerformanceObserver((entryList) => {
+    cb(entryList.getEntries())
+  })
+  perfObserver.observe({ type, buffered: true })
+}
+```
+
+接下来我们获取 FP 及 FCP 指标：
+
+```ts
+export const getPaintTime = () => {
+  const data: { [key: string]: number } = ({} = {})
+  getObserver('paint', entries => {
+    entries.forEach(entry => {
+      data[entry.name] = entry.startTime
+      if (entry.name === 'first-contentful-paint') {
+        getLongTask(entry.startTime)
+      }
+    })
+  })
+  return data
+}
+```
+
+拿到的数据结构长这样：
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108828612128.png)
+
+需要注意的是在拿到 FCP 指标以后同步开始获取 longtask 的时间，这是因为后续的 TBT 指标需要使用 longtask 来计算。
+
+```ts
+export const getLongTask = (fcp: number) => {
+  getObserver('longtask', entries => {
+    entries.forEach(entry => {
+      // get long task time in fcp -> tti
+      if (entry.name !== 'self' || entry.startTime < fcp) {
+        return
+      }
+      // long tasks mean time over 50ms
+      const blockingTime = entry.duration - 50
+      if (blockingTime > 0) tbt += blockingTime
+    })
+  })
+}
+```
+
+接下来我们来拿 FID 指标，以下是代码：
+
+```ts
+export const getFID = () => {
+  getObserver('first-input', entries => {
+    entries.forEach(entry => {
+      if (entry.startTime < hiddenTime) {
+        logIndicator('FID', entry.processingStart - entry.startTime)
+        // TBT is in fcp -> tti
+        // This data may be inaccurate, because fid >= tti
+        logIndicator('TBT', tbt)
+      }
+    })
+  })
+}
+```
+
+FID 的指标数据长这样，需要用户交互才会触发：
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108837705265.png)
+
+在获取 FID 指标以后，我们也去拿了 TBT 指标，但是拿到的数据不一定是准确的。因为 TBT 指标的含义是在 FCP 及 TTI 指标之间的长任务阻塞时间之和，但目前好像没有一个好的方式来获取 TTI 指标数据，所以就用 FID 暂代了。
+
+最后是 CLS 和 LCP 指标，大同小异就贴在一起了：
+
+```ts
+export const getLCP = () => {
+  getObserver('largest-contentful-paint', entries => {
+    entries.forEach(entry => {
+      if (entry.startTime < hiddenTime) {
+        const { startTime, renderTime, size } = entry
+        logIndicator('LCP Update', {
+          time: renderTime | startTime,
+          size,
+        })
+      }
+    })
+  })
+}
+
+export const getCLS = () => {
+  getObserver('layout-shift', entries => {
+    let cls = 0
+    entries.forEach(entry => {
+      if (!entry.hadRecentInput) {
+        cls += entry.value
+      }
+    })
+    logIndicator('CLS Update', cls)
+  })
+}
+```
+
+拿到的数据结构长这样：
+
+![截屏2021-01-17下午7.37.33](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108834615473.png)
+![截屏2021-01-17下午7.37.14](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108834615467.png)
+
+另外这两个指标还和别的不大一样，并不是一成不变的的。一旦有新的数据符合指标要求，就会更新。
+
+以上就是我们需要获取的所有性能指标了，当然光获取到指标肯定是不够，还需要暴露每个数据给用户，对于这种统一操作，我们需要封装一个工具函数出来：
+
+```ts
+// 打印数据
+export const logIndicator = (type: string, data: IPerData) => {
+  tracker(type, data)
+  if (config.log) return
+  // 让 log 好看点
+  console.log(
+    `%cPer%c${type}`,
+    'background: #606060; color: white; padding: 1px 10px; border-top-left-radius: 3px; border-bottom-left-radius: 3px;',
+    'background: #1475b2; color: white; padding: 1px 10px; border-top-right-radius: 3px;border-bottom-right-radius: 3px;',
+    data
+  )
+}
+export default (type: string, data: IPerData) => {
+  const currentType = typeMap[type]
+  allData[currentType] = data
+  // 如果用户传了回调函数，那么每次在新获取指标以后就把相关信息暴露出去
+  config.tracker && config.tracker(currentType, data, allData)
+}
+```
