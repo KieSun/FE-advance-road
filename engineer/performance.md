@@ -14,7 +14,7 @@
 
 - 想了解前端工程化
 
-需要说明的是产出只会是一个低成本下的最小可用产品，你可以拿来按需增加功能或者参考思路或者纯粹当学习一点知识。
+需要说明的是产出只会是一个低成本下的最小可用产品，你可以拿来按需增加功能、参考思路或者纯粹当学习一点知识。
 
 ## 什么是前端工程化？
 
@@ -108,4 +108,126 @@ perfObserver.observe({ type: 'longtask', buffered: true })
 
 因为已经贴了[源码地址](https://github.com/KieSun/p-cop)，笔者就不贴大段代码上来了，会把主要的从零到一过程梳理一遍。
 
-首先我们肯定要设计好用户如何调用 sdk（代指性能检测库）？需要传递哪些参数？如何获取及上报指标？
+首先我们肯定要设计好用户如何调用 SDK（代指性能检测库）？需要传递哪些参数？如何获取及上报性能指标？
+
+一般来说调用 SDK 多是构建一个实例，所以这次我们选择 `class` 的方式来写。参数的话暂定传入一个 `tracker` 函数获取各类指标以及 `log` 变量决定是否打印指标信息，签名如下：
+
+```ts
+export interface IPerProps {
+  tracker?: (type: IPerDataType, data: any, allData: any) => void
+  log?: boolean
+}
+
+export type IPerDataType =
+  | 'navigationTime'
+  | 'networkInfo'
+  | 'paintTime'
+  | 'lcp'
+  | 'cls'
+  | 'fid'
+  | 'tbt'
+```
+
+接下来我们写 `class` 内部的代码，首先在前文中我们知道了 Performance API 是存在兼容问题的，所以我们需要在调用 Performance 之前判断一下浏览器是否支持：
+
+```ts
+export default class Per {
+  constructor(args: IPerProps) {
+    // 存储参数
+    config.tracker = args.tracker
+    if (typeof args.log === 'boolean') config.log = args.log
+    // 判断是否兼容
+    if (!isSupportPerformance) {
+      log(`This browser doesn't support Performance API`)
+      return
+    }
+}
+
+export const isSupportPerformance = () => {
+  const performance = window.performance
+  return (
+    performance &&
+    !!performance.getEntriesByType &&
+    !!performance.now &&
+    !!performance.mark
+  )
+}
+```
+
+以上前置工作完毕以后，就可以开始写获取性能指标数据的代码了。
+
+我们首先通过 `performance.getEntriesByType('navigation')` 来获取关于文档事件的指标
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108632582435.png)
+
+这个 API 还是能拿到挺多事件的时间戳的，如果你想了解这些事件具体含义，可以阅读[文档](https://developer.mozilla.org/en-US/docs/Web/Performance/Navigation_and_resource_timings#performance_timings)，这里就不复制过来占用篇幅了。
+
+看到那么多字段，可能有的读者就晕了，那么多东西我可怎么算指标。其实不需要担心，看完下图结合刚才的[文档](https://developer.mozilla.org/en-US/docs/Web/Performance/Navigation_and_resource_timings#performance_timings)就行了：
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108721308865.jpg)
+
+我们不需要全部利用上获得的字段，重要的指标信息暴露出来即可，照着图和文档依样画葫芦就得出代码：
+
+```ts
+export const getNavigationTime = () => {
+  const navigation = window.performance.getEntriesByType('navigation')
+  if (navigation.length > 0) {
+    const timing = navigation[0] as PerformanceNavigationTiming
+    if (timing) {
+    //   解构出来的字段，太长不贴
+      const {...} = timing
+
+      return {
+        redirect: {
+          count: redirectCount,
+          time: redirectEnd - redirectStart,
+        },
+        appCache: domainLookupStart - fetchStart,
+        // dns lookup time
+        dnsTime: domainLookupEnd - domainLookupStart,
+        // handshake end - handshake start time
+        TCP: connectEnd - connectStart,
+        // HTTP head size
+        headSize: transferSize - encodedBodySize || 0,
+        responseTime: responseEnd - responseStart,
+        // Time to First Byte
+        TTFB: responseStart - requestStart,
+        // fetch resource time
+        fetchTime: responseEnd - fetchStart,
+        // Service work response time
+        workerTime: workerStart > 0 ? responseEnd - workerStart : 0,
+        domReady: domContentLoadedEventEnd - fetchStart,
+        // DOMContentLoaded time
+        DCL: domContentLoadedEventEnd - domContentLoadedEventStart,
+      }
+    }
+  }
+  return {}
+}
+```
+
+以上获得的指标中有不少是和网络有关系的，因此我们还需要结合网络环境来分析，获取网络环境信息很方便，以下是代码：
+
+```ts
+export const getNetworkInfo = () => {
+  if ('connection' in window.navigator) {
+    const connection = window.navigator['connection'] || {}
+    const { effectiveType, downlink, rtt, saveData } = connection
+    return {
+      // 网络类型，4g 3g 这些
+      effectiveType,
+      // 网络下行速度
+      downlink,
+      // 发送数据到接受数据的往返时间
+      rtt,
+      // 打开/请求数据保护模式
+      saveData,
+    }
+  }
+  return {}
+}
+```
+
+拿完以上的指标之后，我们需要用到 `PerformanceObserver` 来拿一些核心指标了。比如说 FP、FCP、FID 等等，内容就包括在我们上文中看过的思维导图中：
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/15/16107213325858.jpg)
