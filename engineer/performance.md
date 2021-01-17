@@ -277,7 +277,7 @@ export const getPaintTime = () => {
 
 拿到的数据结构长这样：
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108828612128.png)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108855875872.png)
 
 需要注意的是在拿到 FCP 指标以后需要同步开始获取 longtask 的时间，这是因为后续的 TBT 指标需要使用 longtask 来计算。
 
