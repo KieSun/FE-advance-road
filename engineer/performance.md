@@ -392,6 +392,57 @@ export default (type: string, data: IPerData) => {
 logIndicator('FID', entry.processingStart - entry.startTime)
 ```
 
+在这里为止我们 SDK 的大体内容已经完成了，我们可以按需添加一些小功能，比如说获取指标分数
+
+指标分数是官方给的一些建议，你可以在[官方 Blog](https://web.dev/learn-web-vitals/) 或者[我的文章](https://juejin.cn/post/6850037270729359367)中看到定义的数据。
+
+代码不复杂，我们就以获取 FCP 指标的分数为例演示一下代码：
+
+```ts
+export const scores: Record<string, number[]> = {
+  fcp: [2000, 4000],
+  lcp: [2500, 4500],
+  fid: [100, 300],
+  tbt: [300, 600],
+  cls: [0.1, 0.25],
+}
+
+export const scoreLevel = ['good', 'needsImprovement', 'poor']
+
+export const getScore = (type: string, data: number) => {
+  const score = scores[type]
+  for (let i = 0; i < score.length; i++) {
+    if (data <= score[i]) return scoreLevel[i]
+  }
+
+  return scoreLevel[2]
+}
+```
+
+首先是获取分数相关的工具函数，这块反正就是看着官方建议照抄，然后我们只需要在刚才获取指标的地方多加一句代码即可：
+
+```ts
+export const getPaintTime = () => {
+  getObserver('paint', (entries) => {
+    entries.forEach((entry) => {
+      const time = entry.startTime
+      const name = entry.name
+      if (name === 'first-contentful-paint') {
+        getLongTask(time)
+        logIndicator('FCP', {
+          time,
+          score: getScore('fcp', time),
+        })
+      } else {
+        logIndicator('FP', {
+          time,
+        })
+      }
+    })
+  })
+}
+```
+
 结束了，有兴趣的可以来[这里](https://github.com/KieSun/p-cop)读一下源码，反正也没几行。
 
 ## 最后
@@ -399,3 +450,5 @@ logIndicator('FID', entry.processingStart - entry.startTime)
 文章周末写的，略显仓促，如有出错请斧正，同时也欢迎大家一起探讨问题。
 
 想看更多文章可以关注我的 [Github](https://github.com/KieSun/FE-advance-road) 或者进群一起聊聊前端工程化。
+
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108863933348.jpg)
