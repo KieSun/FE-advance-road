@@ -166,7 +166,7 @@ export const isSupportPerformance = () => {
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108721308865.jpg)
 
-我们不需要全部利用上获得的字段，重要的指标信息暴露出来即可，照着图和文档依样画葫芦就得出代码：
+我们不需要全部利用上获得的字段，重要的指标信息暴露出来即可，照着图和文档依样画葫芦就能得出代码：
 
 ```ts
 export const getNavigationTime = () => {
@@ -206,7 +206,7 @@ export const getNavigationTime = () => {
 }
 ```
 
-以上获得的指标中有不少是和网络有关系的，因此我们还需要结合网络环境来分析，获取网络环境信息很方便，以下是代码：
+大家可以发现以上获得的指标中有不少是和网络有关系的，因此我们还需要结合网络环境来分析，获取网络环境信息很方便，以下是代码：
 
 ```ts
 export const getNetworkInfo = () => {
@@ -232,7 +232,7 @@ export const getNetworkInfo = () => {
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/15/16107213325858.jpg)
 
-在这之前我们需要先了解一个注意事项：页面是有可能在处于后台的情况下加载的，因此获取的指标是不准确的。所以我们需要忽略掉这种情况，通过以下代码来存储一个变量，在获取指标的时候比较一下时间戳来判断是否处于后台中：
+在这之前我们需要先了解一个注意事项：页面是有可能在处于后台的情况下加载的，因此这种情况下获取的指标是不准确的。所以我们需要忽略掉这种情况，通过以下代码来存储一个变量，在获取指标的时候比较一下时间戳来判断是否处于后台中：
 
 ```ts
 document.addEventListener(
@@ -257,7 +257,7 @@ export const getObserver = (type: string, cb: IPerCallback) => {
 }
 ```
 
-接下来我们获取 FP 及 FCP 指标：
+我们先来获取 FP 及 FCP 指标：
 
 ```ts
 export const getPaintTime = () => {
@@ -278,7 +278,7 @@ export const getPaintTime = () => {
 
 ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108828612128.png)
 
-需要注意的是在拿到 FCP 指标以后同步开始获取 longtask 的时间，这是因为后续的 TBT 指标需要使用 longtask 来计算。
+需要注意的是在拿到 FCP 指标以后需要同步开始获取 longtask 的时间，这是因为后续的 TBT 指标需要使用 longtask 来计算。
 
 ```ts
 export const getLongTask = (fcp: number) => {
@@ -354,7 +354,7 @@ export const getCLS = () => {
 ![截屏2021-01-17下午7.37.33](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108834615473.png)
 ![截屏2021-01-17下午7.37.14](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108834615467.png)
 
-另外这两个指标还和别的不大一样，并不是一成不变的的。一旦有新的数据符合指标要求，就会更新。
+另外这两个指标还和别的不大一样，并不是一成不变的。一旦有新的数据符合指标要求，就会更新。
 
 以上就是我们需要获取的所有性能指标了，当然光获取到指标肯定是不够，还需要暴露每个数据给用户，对于这种统一操作，我们需要封装一个工具函数出来：
 
@@ -378,3 +378,11 @@ export default (type: string, data: IPerData) => {
   config.tracker && config.tracker(currentType, data, allData)
 }
 ```
+
+封装好函数以后，我们可以这样调用：
+
+```ts
+logIndicator('FID', entry.processingStart - entry.startTime)
+```
+
+结束了，有兴趣的可以来[这里](https://github.com/KieSun/p-cop)读一下源码，反正也没几行。
