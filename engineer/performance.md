@@ -451,4 +451,4 @@ export const getPaintTime = () => {
 
 想看更多文章可以关注我的 [Github](https://github.com/KieSun/FE-advance-road) 或者进群一起聊聊前端工程化。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108863933348.jpg)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/2021/01/17/16108911355439.jpeg)
