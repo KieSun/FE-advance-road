@@ -2,7 +2,8 @@
 
 本文涉及到的源码及视频地址：
 
-- [源码](https://github.com/KieSun/p-cop)
+- [源码](https://github.com/KieSun/per-moniteur)
+- [视频](https://www.bilibili.com/video/BV1uf4y1k7cp/)，因为制作肯定比文字需要的时间多，所以本周才会更新完毕，大家可以先对视频插个眼
 
 ## 前言
 
@@ -60,7 +61,7 @@
 
 ## 实战
 
-这是此处产品的源码：[地址](https://github.com/KieSun/p-cop)。
+这是此处产品的源码：[地址](https://github.com/KieSun/per-moniteur)。
 
 ### 一些性能指标
 
@@ -113,7 +114,7 @@ perfObserver.observe({ type: 'longtask', buffered: true })
 
 ### 上代码！
 
-因为已经贴了[源码地址](https://github.com/KieSun/p-cop)，笔者就不贴大段代码上来了，会把主要的从零到一过程梳理一遍。
+因为已经贴了[源码地址](https://github.com/KieSun/per-moniteur)，笔者就不贴大段代码上来了，会把主要的从零到一过程梳理一遍。
 
 首先我们肯定要设计好用户如何调用 SDK（代指性能检测库）？需要传递哪些参数？如何获取及上报性能指标？
 
@@ -443,7 +444,7 @@ export const getPaintTime = () => {
 }
 ```
 
-结束了，有兴趣的可以来[这里](https://github.com/KieSun/p-cop)读一下源码，反正也没几行。
+结束了，有兴趣的可以来[这里](https://github.com/KieSun/per-moniteur)读一下源码，反正也没几行。
 
 ## 最后
 
