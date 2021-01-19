@@ -1,4 +1,4 @@
-> 本文永远首发自我的 [Github](https://github.com/KieSun/FE-advance-road)，大家可以关注点赞，通常会早于发布各大平台一周时间以上。
+> 工程化体系专栏永远首发自我的 [Github](https://github.com/KieSun/FE-advance-road)，大家可以关注点赞，通常会早于发布各大平台一周时间以上。
 
 本文涉及到的源码及视频地址：
 
